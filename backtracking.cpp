@@ -52,7 +52,6 @@ int ratInMaze(int i, int j, vector<vector<int>> &grid) {
   return ans;
 }
 
-*/
 bool canWePlace(int row, int col, vector<vector<char>> grid) {
   // For vertical
   for (int i = row - 1; i >= 0; i--) {
@@ -78,6 +77,7 @@ bool canWePlace(int row, int col, vector<vector<char>> grid) {
 }
 
 void nQueen(int currentRow, int n, vector<vector<char>> &grid) {
+
   if (currentRow == n) {
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < n; j++) {
@@ -99,14 +99,73 @@ void nQueen(int currentRow, int n, vector<vector<char>> &grid) {
   }
 }
 
+
+bool canWePlace(int (*grid)[9], int row, int col, int num) {
+    for (int i = 0; i < 9; i++) {
+        if (grid[i][col] == num) {
+            return false;
+        }
+
+        if (grid[row][i] == num) {
+            return false;
+        }
+    }
+
+    int r = (row / 3) * 3;
+    int c = (col / 3) * 3;
+
+    for (int i = r; i < r + 3; i++) {
+        for (int j = c; j < c + 3; j++) {
+            if (grid[i][j] == num) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool sudoku(int (*grid)[9], int row, int col) {
+    if (col == 9) return sudoku(grid, row + 1, 0);
+    if (row == 9) return true;
+    if (grid[row][col] == 0) {
+        for (int num = 1; num <= 9; num++) {
+            if (canWePlace(grid, row, col, num)) {
+                grid[row][col] = num;
+                bool res = sudoku(grid, row, col + 1);
+                if (res) return true;
+                grid[row][col] = 0;
+            }
+        }
+        return false;
+    } else {
+        return sudoku(grid, row, col + 1);
+    }
+}
+
+
+void sudoku_solve(int grid[9][9]) {
+    sudoku(grid, 0, 0);
+    for (int i = 0; i < 9; ++i) {
+        for (int j = 0; j < 9; ++j) {
+            cout << grid[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+
+*/
+
 int main() {
   // string str = "ABCDEFG";
   // vector<vector<int>> grid = {
   // {1, 1, 1, 1}, {0, 1, 0, 1}, {0, 1, 0, 1}, {0, 1, 1, 1}};
   // int ans = ratInMaze(0, 0, grid);
   // cout << ans;
-  int n = 4;
-  vector<vector<char>> grid(n, vector<char>(n, '.'));
-  nQueen(0, n, grid);
+  // int n = 4;
+  // vector<vector<char>> grid(n, vector<char>(n, '.'));
+  // nQueen(0, n, grid);
+
   return 0;
 }
